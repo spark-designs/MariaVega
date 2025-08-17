@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maria Vega | AAA Realty</title>
+   
+    <script src="https://cdn.tailwindcss.com"></script>
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+   
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- GSAP for Advanced Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <style>
+        /* Custom styles for the luxury aesthetic */
+        :root {
+            --background-light: #ffffff;
+            --background-gray: #f9fafb; /* bg-gray-50 */
+            --text-dark: #333;
+            --accent: #009de0;
+            --navy-blue: #2c3e50; /* Calm Navy Blue */
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        /* Preloader Styling */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f3f0; /* A soft off-white */
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-dark);
+            flex-direction: column;
+        }
+        #preloader-logo {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        #preloader-logo svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            stroke: var(--text-dark);
+            stroke-width: 1;
+            fill: none;
+            stroke-dasharray: 500;
+            stroke-dashoffset: 500;
+        }
+        #preloader-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-top: 1rem;
+            opacity: 0;
+        }
+       
+        /* Hero Image Styling */
+        .hero-image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -2;
+        }
+
+        #heroImage {
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+
+        /* Navigation transition */
+        .nav-transparent {
+            background-color: transparent;
+            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .nav-scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+       
+        .nav-scrolled .nav-logo,
+        .nav-scrolled .nav-link,
+        .nav-scrolled .nav-button {
+            color: #333 !important;
+        }
+
+        .nav-scrolled .contact-button-bordered {
+            border-color: var(--text-dark) !important;
+        }
+       
+        .nav-scrolled .nav-link:hover,
+        .nav-scrolled .nav-button:hover {
+            color: #888 !important;
+        }
+
+        /* Property card hover effect */
+        .property-card .overlay {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .property-card:hover .overlay {
+            opacity: 1;
+        }
+       
+        .property-card img {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .property-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Parallax CTA section */
+        .parallax-bg {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        /* Custom dropdown for navigation */
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+       
+        .dropdown-menu {
+            display: none;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+       
+    </style>
+</head>
+<body class="bg-white">
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div id="preloader-logo">
+            <svg viewBox="0 0 100 100">
+                <path d="M 50,5 L 95,27.5 L 95,72.5 L 50,95 L 5,72.5 L 5,27.5 Z"></path>
+            </svg>
+        </div>
+        <div id="preloader-text">MARIA VEGA</div>
+    </div>
+
+    <div id="main-content" class="opacity-0">
+        <header id="navbar" class="fixed top-0 left-0 right-0 z-50 nav-transparent text-white">
+            <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <a href="#" class="nav-logo text-2xl font-bold tracking-wider" style="font-family: 'Cormorant Garamond', serif;">MARIA VEGA</a>
+                <nav class="hidden md:flex items-center space-x-8">
+                    <div class="dropdown relative">
+                        <a href="#properties" class="nav-link text-sm uppercase tracking-widest transition duration-300">Listings</a>
+                        <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md py-2">
+                            <a href="#properties" class="block px-4 py-2 text-sm hover:bg-gray-100">Featured Properties</a>
+                        </div>
+                    </div>
+                    <div class="dropdown relative">
+                        <a href="#communities" class="nav-link text-sm uppercase tracking-widest transition duration-300">Communities</a>
+                         <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md py-2">
+                            <a href="#communities" class="block px-4 py-2 text-sm hover:bg-gray-100">Spring Area</a>
+                            <a href="#communities" class="block px-4 py-2 text-sm hover:bg-gray-100">Downtown</a>
+                            <a href="#communities" class="block px-4 py-2 text-sm hover:bg-gray-100">Midtown</a>
+                        </div>
+                    </div>
+                     <div class="dropdown relative">
+                        <a href="#agent" class="nav-link text-sm uppercase tracking-widest transition duration-300">About</a>
+                         <div class="dropdown-menu absolute left-0 mt-2 w-48 bg-white text-black shadow-lg rounded-md py-2">
+                            <a href="#agent" class="block px-4 py-2 text-sm hover:bg-gray-100">Meet Maria</a>
+                            <a href="#testimonials" class="block px-4 py-2 text-sm hover:bg-gray-100">Testimonials</a>
+                        </div>
+                    </div>
+                    <a href="#services" class="nav-link text-sm uppercase tracking-widest transition duration-300">Client Services</a>
+                </nav>
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#contact" class="nav-button contact-button-bordered text-sm uppercase tracking-widest border border-white/50 px-4 py-2 rounded-full hover:bg-white hover:text-black transition duration-300">Contact</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button">
+                        <i data-lucide="menu"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden bg-white/95 text-black">
+                <a href="#properties" class="block py-2 px-4 text-sm uppercase">Listings</a>
+                <a href="#communities" class="block py-2 px-4 text-sm uppercase">Communities</a>
+                <a href="#agent" class="block py-2 px-4 text-sm uppercase">About</a>
+                <a href="#services" class="block py-2 px-4 text-sm uppercase">Client Services</a>
+                <a href="#contact" class="block py-2 px-4 text-sm uppercase">Contact</a>
+            </div>
+        </header>
+
+        <main>
+            <section class="relative h-screen flex items-center justify-center text-white text-center">
+                <div class="hero-image-container">
+                    <img id="heroImage" src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bHV4dXJ5JTIwaG91c2V8ZW58MHx8MHx8fDA%3D" alt="Luxury House Exterior">
+                </div>
+                <div class="image-overlay"></div>
+                <div class="z-10 p-6 reveal">
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold uppercase tracking-widest mb-6">Maria Vega</h1>
+                    <p class="text-xl md:text-2xl mb-8 tracking-wider">Your Guide to Houston Real Estate</p>
+                    <a href="#properties" class="bg-white/10 border border-white/50 backdrop-blur-sm text-white uppercase tracking-widest font-light px-10 py-3 rounded-full hover:bg-white hover:text-black transition duration-300">
+                        Explore Properties
+                    </a>
+                </div>
+            </section>
+
+            <section id="properties" class="py-24 bg-white reveal">
+                <div class="container mx-auto px-6">
+                    <h2 class="text-4xl md:text-5xl text-center mb-4">Featured Properties</h2>
+                    <p class="text-center text-gray-500 mb-12 max-w-2xl mx-auto">A curated selection of homes and properties available in the greater Houston area.</p>
+                   
+                    <div class="mb-12 p-4 bg-gray-50 rounded-lg shadow-sm flex flex-col md:flex-row items-center gap-4">
+                        <input id="keyword-search" type="text" placeholder="Search by address, city, or keyword..." class="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        <select id="price-range" class="w-full md:w-1/4 p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300">
+                            <option value="all">All Prices</option>
+                            <option value="0-250000">$0 - $250k</option>
+                            <option value="250000-500000">$250k - $500k</option>
+                            <option value="500000+">$500k+</option>
+                        </select>
+                        <button id="search-button" class="w-full md:w-auto bg-gray-800 text-white px-8 py-3 rounded-md hover:bg-gray-700 transition">Search</button>
+                    </div>
+
+                    <div id="property-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Property cards will be dynamically inserted by JS -->
+                    </div>
+                    <div id="no-results" class="hidden text-center py-12">
+                        <h3 class="text-2xl text-gray-700">No Properties Found</h3>
+                        <p class="text-gray-500 mt-2">Please adjust your search criteria and try again.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- === AGENT SECTION === -->
+            <section id="agent" class="py-24 bg-gray-50 reveal">
+                <div class="container mx-auto px-6">
+                    <div class="bg-white rounded-lg shadow-xl overflow-hidden flex flex-wrap lg:flex-nowrap items-center p-8 lg:p-4">
+                        <!-- Image Column -->
+                        <div class="w-full lg:w-1/3 flex justify-center p-4">
+                            <div class="w-full max-w-[280px] transform hover:scale-105 transition-transform duration-300">
+                               <img src="https://images1.loopnet.com/i2/wwrC3VH2dFTlpJ-yoDjnHHxoRqWtmcN5vGTXMXzN4UA/118/maria-vega.jpg" alt="Maria Vega" class="rounded-full shadow-lg w-full h-auto object-cover">
+                            </div>
+                        </div>
+                        <!-- Text Column -->
+                        <div class="w-full lg:w-2/3 p-4 lg:pl-12">
+                            <h2 class="text-4xl md:text-5xl mb-2">Meet Maria Vega</h2>
+                            <p class="mb-6 text-xl" style="color: var(--navy-blue);">Real Estate Professional at AAA Realty</p>
+                            <p class="text-gray-600 leading-relaxed mb-6">With a passion for real estate and a commitment to helping clients achieve their dreams, Maria Vega is a guiding force in the Houston market. Known for her dedication and market expertise, she ensures every client feels supported and confident throughout their real-estate journey, whether buying their first home or selling a long-held property.</p>
+                           
+                            <!-- === SKILLS SECTION === -->
+                            <div class="border-t border-gray-200 pt-6 mt-6">
+                                <h4 class="text-lg font-semibold text-gray-800 mb-4 uppercase tracking-wider">Professional Skills</h4>
+                                <div class="flex flex-wrap gap-2 text-sm">
+                                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full border">Buyer Representation</span>
+                                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full border">Seller Representation</span>
+                                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full border">Market Analysis</span>
+                                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full border">Real Estate Transactions</span>
+                                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full border">Negotiation</span>
+                                    <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full border">Investment Properties</span>
+                                </div>
+                            </div>
+                            <a href="#contact" class="inline-block mt-8 bg-gray-800 text-white uppercase tracking-widest text-sm px-8 py-4 rounded-md hover:bg-gray-700 transition">Schedule a Consultation</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+           
+            <section id="testimonials" class="py-24 bg-white reveal">
+                 <div class="container mx-auto px-6">
+                    <h2 class="text-4xl md:text-5xl text-center mb-12">What My Clients Say</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <blockquote class="text-gray-600 italic mb-4">"Maria was very professional and knowledgeable. She was always available to answer our questions and guide us through the process. We would highly recommend her to anyone looking to buy or sell a home."</blockquote>
+                            <cite class="block not-italic font-semibold text-right">- Client Testimonial</cite>
+                        </div>
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <blockquote class="text-gray-600 italic mb-4">"Working with Maria was a great experience. She is very patient and understanding. She took the time to explain everything to us and made sure we were comfortable with every decision."</blockquote>
+                            <cite class="block not-italic font-semibold text-right">- Client Testimonial</cite>
+                        </div>
+                        <div class="bg-white p-8 rounded-lg shadow-lg">
+                            <blockquote class="text-gray-600 italic mb-4">"Maria is a true professional. She is very knowledgeable about the market and was able to get us a great deal on our new home. We would definitely use her again in the future."</blockquote>
+                            <cite class="block not-italic font-semibold text-right">- Client Testimonial</cite>
+                        </div>
+                    </div>
+                 </div>
+            </section>
+
+            <!-- === COMMUNITIES SECTION === -->
+            <section id="communities" class="py-24 bg-gray-50 reveal">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-16">
+                        <h2 class="text-4xl md:text-5xl">Specializing in Houston's Premier Neighborhoods</h2>
+                        <p class="text-gray-500 mt-4 max-w-2xl mx-auto">Deep expertise in the communities that define the modern Houston lifestyle.</p>
+                    </div>
+                   
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Card 1: Spring Area -->
+                        <div class="md:row-span-2 rounded-lg overflow-hidden shadow-xl group relative cursor-pointer">
+                            <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Suburban home in Spring, Texas" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-8 flex flex-col justify-end">
+                                <h3 class="text-3xl text-white mb-2">Spring Area</h3>
+                                <p class="text-gray-300 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-h-0 group-hover:max-h-screen">Discover the vibrant and growing community of Spring, offering a fantastic quality of life with excellent schools, beautiful parks, and a wide variety of shopping and dining options just north of Houston.</p>
+                            </div>
+                        </div>
+                   
+                        <!-- Card 2: Downtown -->
+                        <div class="h-80 rounded-lg overflow-hidden shadow-xl group relative cursor-pointer">
+                             <img src="https://media-www.houstonproperties.com/topic/midtown/CrawfordAerialTW-8.jpg" alt="Downtown Houston skyline" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-8 flex flex-col justify-end">
+                                <h3 class="text-3xl text-white mb-2">Downtown</h3>
+                                <p class="text-gray-300 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-h-0 group-hover:max-h-screen">Embrace the heart of the city. Downtown living offers unparalleled access to business hubs, theater districts, sports arenas, and a thriving urban park system at Discovery Green.</p>
+                            </div>
+                        </div>
+                   
+                        <!-- Card 3: Midtown -->
+                        <div class="h-80 rounded-lg overflow-hidden shadow-xl group relative cursor-pointer">
+                            <img src="https://media-production.lp-cdn.com/cdn-cgi/image/format=auto,quality=85,fit=scale-down,width=960/https://media-production.lp-cdn.com/media/aurslijkq2lw2edz0ufo" alt="Vibrant street scene in Midtown Houston" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent p-8 flex flex-col justify-end">
+                                <h3 class="text-3xl text-white mb-2">Midtown</h3>
+                                <p class="text-gray-300 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 max-h-0 group-hover:max-h-screen">Live at the center of it all. Midtown offers a dynamic, walkable lifestyle with premier access to dining, nightlife, and cultural attractions, featuring a mix of modern townhomes and luxury condos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+           
+            <section id="services" class="py-24 bg-white reveal">
+                <div class="container mx-auto px-6 text-center">
+                    <h2 class="text-4xl md:text-5xl mb-4">Comprehensive Client Services</h2>
+                    <p class="text-gray-500 mb-12 max-w-2xl mx-auto">My commitment extends beyond the transaction. I provide a suite of services to ensure a seamless and successful experience.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="p-8 bg-gray-50 rounded-lg hover:shadow-xl transition-shadow duration-300">
+                            <i data-lucide="search" class="mx-auto mb-4 text-gray-500 w-12 h-12 stroke-1"></i>
+                            <h3 class="text-xl font-semibold mb-2">Buyer Representation</h3>
+                            <p class="text-gray-600 text-sm">Expert guidance to find and secure your perfect home at the best possible price.</p>
+                        </div>
+                        <div class="p-8 bg-gray-50 rounded-lg hover:shadow-xl transition-shadow duration-300">
+                            <i data-lucide="home" class="mx-auto mb-4 text-gray-500 w-12 h-12 stroke-1"></i>
+                            <h3 class="text-xl font-semibold mb-2">Seller Representation</h3>
+                            <p class="text-gray-600 text-sm">Strategic marketing and negotiation to maximize your property's value.</p>
+                        </div>
+                        <div class="p-8 bg-gray-50 rounded-lg hover:shadow-xl transition-shadow duration-300">
+                            <i data-lucide="key-round" class="mx-auto mb-4 text-gray-500 w-12 h-12 stroke-1"></i>
+                            <h3 class="text-xl font-semibold mb-2">Leasing Services</h3>
+                            <p class="text-gray-600 text-sm">Comprehensive support for both landlords and tenants in the luxury rental market.</p>
+                        </div>
+                        <div class="p-8 bg-gray-50 rounded-lg hover:shadow-xl transition-shadow duration-300">
+                            <i data-lucide="shield-check" class="mx-auto mb-4 text-gray-500 w-12 h-12 stroke-1"></i>
+                            <h3 class="text-xl font-semibold mb-2">Market Analysis</h3>
+                            <p class="text-gray-600 text-sm">In-depth data and insights to inform your buying, selling, or investment decisions.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact" class="h-[70vh] parallax-bg flex items-center justify-center" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+                <div class="absolute inset-0 bg-black/50"></div>
+                <div class="relative z-10 container mx-auto px-6 text-center text-white reveal">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6">Reserve Your Confidential Consultation</h2>
+                    <p class="mb-8 max-w-2xl mx-auto">Discuss your unique real estate needs with an experienced professional in a private, no-obligation consultation.</p>
+                    <form class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+                        <input type="text" placeholder="Full Name" class="w-full p-4 bg-white/10 border border-white/30 rounded-md placeholder-white/70 text-white focus:outline-none focus:ring-2 focus:ring-white">
+                        <input type="email" placeholder="Email Address" class="w-full p-4 bg-white/10 border border-white/30 rounded-md placeholder-white/70 text-white focus:outline-none focus:ring-2 focus:ring-white">
+                        <button type="submit" class="w-full md:w-auto bg-white text-black uppercase tracking-widest font-semibold px-8 py-4 rounded-md hover:bg-gray-200 transition">Submit</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-gray-100 text-gray-600">
+            <div class="container mx-auto px-6 py-12">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 mb-4" style="font-family: 'Cormorant Garamond', serif;">MARIA VEGA</h4>
+                        <p>Real Estate Professional, AAA Realty</p>
+                        <p class="mt-4">TX Real Estate License #781534</p>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-gray-800 mb-4 uppercase tracking-wider">Navigation</h5>
+                        <a href="#properties" class="block mb-2 hover:text-black">Listings</a>
+                        <a href="#communities" class="block mb-2 hover:text-black">Communities</a>
+                        <a href="#agent" class="block mb-2 hover:text-black">About</a>
+                        <a href="#contact" class="block mb-2 hover:text-black">Contact</a>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-gray-800 mb-4 uppercase tracking-wider">Contact</h5>
+                        <p>AAA Realty</p>
+                        <p class="mt-2">(832) 541-9563</p>
+                        <p class="mt-2">mariavegarealtor@gmail.com</p>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-gray-800 mb-4 uppercase tracking-wider">Connect</h5>
+                        <div class="flex space-x-4">
+                            <a href="#" target="_blank" class="hover:text-black"><i data-lucide="home"></i></a>
+                            <a href="#" target="_blank" class="hover:text-black"><i data-lucide="instagram"></i></a>
+                            <a href="#" target="_blank" class="hover:text-black"><i data-lucide="linkedin"></i></a>
+                            <a href="#" target="_blank" class="hover:text-black"><i data-lucide="facebook"></i></a>
+                        </div>
+                         <p class="mt-4 text-xs">Affiliated with <span class="font-semibold">AAA Realty</span></p>
+                    </div>
+                </div>
+                <div class="mt-12 border-t border-gray-300 pt-6 text-center text-xs">
+                    <p>&copy; 2024 Maria Vega | AAA Realty. All Rights Reserved. Equal Housing Opportunity.</p>
+                </div>
+            </div>
+        </footer>
+    </div> <!-- End #main-content -->
+   
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.registerPlugin(ScrollTrigger);
+            lucide.createIcons();
+
+            // --- MARIA VEGA'S LISTINGS ---
+            const properties = [
+                { status: "Active", price: 215000, title: "214 W Marion St", location: "Clute, TX 77531", details: "3 Beds | 2 Baths | 1,368 Sqft", image: "https://photos.zillowstatic.com/fp/c22ca1b3ad7da9a79d00e0463de7a001-cc_ft_1152.webp", link: "https://www.har.com/homedetail/214-w-marion-st-clute-tx-77531/11994373?lid=10125127&cid=samlilly" },
+                { status: "Active", price: 330000, title: "15519 Taylorcrest Dr", location: "Conroe, TX 77306", details: "3 Beds | 2 Baths | 1,607 Sqft", image: "https://photos.zillowstatic.com/fp/39bc37b8cfef6579457fb216ce9253eb-cc_ft_1152.webp", link: "https://www.har.com/homedetail/15519-taylorcrest-dr-conroe-tx-77306/15887812?cid=samlilly" },
+                { status: "Active", price: 300000, title: "8302 Bee Meadow Ln", location: "Missouri City, TX 77489", details: "3 Beds | 2 Baths | 1,844 Sqft", image: "https://photos.zillowstatic.com/fp/8a2838165d4b20436f0ac8060f91235e-cc_ft_1152.webp", link: "https://www.har.com/homedetail/8302-bee-meadow-ln-missouri-city-tx-77489/10631812?cid=samlilly" },
+                { status: "Active", price: 310000, title: "7822 Pacific Pearl St", location: "Houston, TX 77072", details: "4 Beds | 2 Baths | 1,692 Sqft", image: "https://photos.zillowstatic.com/fp/a4bfaa34319e201b0f92510b028b3c17-cc_ft_1152.webp", link: "https://www.har.com/homedetail/7822-pacific-pearl-st-houston-tx-77072/10033306?cid=samlilly" },
+                { status: "Active", price: 280000, title: "6923 Coral Ridge Rd", location: "Houston, TX 77069", details: "3 Beds | 2 Baths | 2,058 Sqft", image: "https://photos.zillowstatic.com/fp/3e67cf020cae4c6f7f012d4461a09033-cc_ft_1152.webp", link: "https://www.har.com/homedetail/6923-coral-ridge-rd-houston-tx-77069/3467231?cid=samlilly" },
+                { status: "Active", price: 1100000, title: "1014 E 23rd St #1", location: "Bryan, TX 77803", details: "Multi-Family", image: "https://photos.zillowstatic.com/fp/548478927caab4a208346bacb6e8bde3-cc_ft_1152.webp", link: "https://www.har.com/homedetail/1014-e-23rd-st-1-bryan-tx-77803/17250001?cid=samlilly" },
+                { status: "Active", price: 1200000, title: "7610 Red Robin Ln #2", location: "Houston, TX 77075", details: "Multi-Family", image: "https://photos.zillowstatic.com/fp/8e4bee199069d7ddf882bb5be7879cb8-cc_ft_1536.webp", link: "https://www.har.com/homedetail/7610-red-robin-ln-2-houston-tx-77075/17207634?cid=samlilly" },
+                { status: "Active", price: 120000, title: "294 Road 5242", location: "Cleveland, TX 77327", details: "Lots & Acreage | 1.15 Acres", image: "https://photos.zillowstatic.com/fp/8e4bee199069d7ddf882bb5be7879cb8-cc_ft_1152.webp", link: "https://www.har.com/homedetail/294-road-5242-cleveland-tx-77327/14964825?cid=samlilly" },
+                { status: "Active", price: 145000, title: "LOT 20 TBD E HICKORY BOW LN", location: "Hempstead, TX 77445", details: "Lots & Acreage | 2.00 Acres", image: "https://feed-images.rewhosting.com/har/Photo/Property/6b72df307f2907d9e51cc0b926143d86/1-280234e284cd7ddafd783157607a81bf-l.jpg", link: "https://www.har.com/homedetail/lot-20-tbd-e-hickory-bow-ln-hempstead-tx-77445/16796613?cid=samlilly" }
+            ];
+           
+            const propertyGrid = document.getElementById('property-grid');
+            const noResultsDiv = document.getElementById('no-results');
+
+            // --- Preloader Function ---
+            function setupPreloader() {
+                const preloader = document.getElementById('preloader');
+                const svgPath = document.querySelector('#preloader-logo svg path');
+                const text = document.getElementById('preloader-text');
+                const mainContent = document.getElementById('main-content');
+
+                const tl = gsap.timeline({
+                    onComplete: () => {
+                        gsap.to(preloader, {
+                            opacity: 0,
+                            duration: 0.5,
+                            onComplete: () => preloader.style.display = 'none'
+                        });
+                        gsap.to(mainContent, { opacity: 1, duration: 1 });
+                        initScrollAnimations(); // Start scroll animations after preloader
+                    }
+                });
+
+                tl.to(svgPath, { strokeDashoffset: 0, duration: 2, ease: 'power2.inOut' })
+                  .to(text, { opacity: 1, duration: 1 }, "-=1")
+                  .to(preloader, { delay: 0.5 }); // Pause for a moment
+            }
+
+            // --- Function to render properties ---
+            function renderProperties(filteredProperties) {
+                propertyGrid.innerHTML = '';
+                if (filteredProperties.length === 0) {
+                    noResultsDiv.classList.remove('hidden');
+                } else {
+                    noResultsDiv.classList.add('hidden');
+                }
+                filteredProperties.forEach(prop => {
+                    const card = `
+                        <a href="${prop.link}" target="_blank" class="property-card block bg-white rounded-lg overflow-hidden shadow-md group">
+                            <div class="relative">
+                                <img src="${prop.image}" alt="${prop.title}" class="w-full h-64 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/e2e8f0/94a3b8?text=Image+Not+Found';">
+                                <div class="overlay absolute inset-0 bg-black/50 flex items-center justify-center text-white p-4 text-center">
+                                    <div>
+                                        <p class="text-lg">${prop.details}</p>
+                                        <p class="text-2xl font-bold mt-2">$${prop.price.toLocaleString()}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <h3 class="text-2xl font-semibold mb-2">${prop.title}</h3>
+                                <p class="text-gray-600">${prop.location}</p>
+                            </div>
+                        </a>
+                    `;
+                    propertyGrid.innerHTML += card;
+                });
+            }
+
+            // --- Scroll-Based Animations ---
+            function initScrollAnimations() {
+                // Animate general sections
+                document.querySelectorAll('.reveal').forEach(el => {
+                    gsap.from(el, {
+                        opacity: 0,
+                        y: 50,
+                        duration: 1,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top 85%',
+                            toggleActions: 'play none none none'
+                        }
+                    });
+                });
+            }
+
+
+            // --- Event Listeners & Initial Calls ---
+           
+            // Start preloader
+            setupPreloader();
+
+            // Initial Render
+            renderProperties(properties);
+
+            // Property Filter Functionality
+            document.getElementById('search-button').addEventListener('click', () => {
+                const keyword = document.getElementById('keyword-search').value.toLowerCase();
+                const priceRange = document.getElementById('price-range').value;
+
+                const filtered = properties.filter(card => {
+                    const titleAndLocation = (card.title + ' ' + card.location).toLowerCase();
+                    const price = card.price;
+
+                    const keywordMatch = titleAndLocation.includes(keyword);
+
+                    let priceMatch = false;
+                    if (priceRange === 'all') {
+                        priceMatch = true;
+                    } else if (priceRange === '500000+') {
+                        if (price >= 500000) priceMatch = true;
+                    } else {
+                        const [min, max] = priceRange.split('-').map(p => parseInt(p));
+                        if (price >= min && price <= max) priceMatch = true;
+                    }
+                   
+                    return keywordMatch && priceMatch;
+                });
+
+                renderProperties(filtered);
+            });
+
+            // Navigation bar scroll effect
+            const navbar = document.getElementById('navbar');
+            window.onscroll = function () {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('nav-scrolled');
+                    navbar.classList.remove('nav-transparent', 'text-white');
+                } else {
+                    navbar.classList.add('nav-transparent', 'text-white');
+                    navbar.classList.remove('nav-scrolled');
+                }
+            };
+
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>
